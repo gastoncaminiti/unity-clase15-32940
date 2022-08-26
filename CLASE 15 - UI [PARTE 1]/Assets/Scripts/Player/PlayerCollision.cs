@@ -13,6 +13,7 @@ public class PlayerCollision : MonoBehaviour
     {
         playerData = GetComponent<PlayerData>();
         playerMove = GetComponent<PlayerMoveForce>();
+        HUDManager.SetHPBar(playerData.HP);
     }
 
     private void OnCollisionEnter(Collision other)
@@ -23,7 +24,7 @@ public class PlayerCollision : MonoBehaviour
             Destroy(other.gameObject);
             //sumar vida
             playerData.Healing(other.gameObject.GetComponent<Pumpkin>().HealPoints);
-
+            HUDManager.SetHPBar(playerData.HP);
             //SUMAS SCORE
             GameManager.Score++;
             Debug.Log(GameManager.Score);
@@ -33,6 +34,7 @@ public class PlayerCollision : MonoBehaviour
         {
             Debug.Log("ENTRANDO EN COLISION CON " + other.gameObject.name);
             playerData.Damage(other.gameObject.GetComponent<Munition>().DamagePoints);
+            HUDManager.SetHPBar(playerData.HP);
             Destroy(other.gameObject);
             if (playerData.HP <= 0)
             {
@@ -103,5 +105,21 @@ public class PlayerCollision : MonoBehaviour
     private void OnTriggerStay(Collider other)
     {
 
+    }
+
+    //CUANDO UN MOUSE INGRESA A UN COLLIDER
+    private void OnMouseEnter() {
+        HUDManager.Instance.SetSelectedText(gameObject.name);
+    }
+
+    //CUANDO UN MOUSE SALE DE UN COLLIDER
+    private void OnMouseExit() {
+        HUDManager.Instance.SetSelectedText("");
+    }
+
+    //CUANDO SE PRESIONA EL CLIC IZQUIEDO EN UN COLLIDER
+    private void OnMouseDown() {
+        HUDManager.Instance.SetSelectedText(" CLICKED ");
+ 
     }
 }
